@@ -1,0 +1,50 @@
+#include <iostream>
+
+using namespace std;
+
+class node{
+public:
+	int data;
+	node *left,*right;
+	node(int);
+};
+
+node::node(int n){
+	data=n;
+	left=NULL;
+	right=NULL;
+}
+node *root=NULL;
+node* insertNode(node* current,int value){
+	if(current==NULL) return new node(value);
+	if(value<current->data) {
+		current->left=insertNode(current->left,value);
+	}else{
+		current->right=insertNode(current->right,value);
+	}
+}
+
+void post(node* current){
+	if(current){
+	post(current->left);
+	post(current->right);
+	cout<<current->data<<" ";
+	}
+}
+
+void pre(node* current){
+	if(current){
+		cout<<current->data<<" ";
+		pre(current->left);
+		pre(current->right);
+	}
+}
+
+int main(){
+	root=insertNode(root,34);
+	root=insertNode(root,43);
+	root=insertNode(root,54);
+	root=insertNode(root,65);
+	post(root);
+	return 0;
+}
