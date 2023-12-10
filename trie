@@ -1,0 +1,80 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int tri[1000000][26];
+int dict_size=0;
+int words_in[1000000][26];
+int word_complete[1000000];
+void insrt(string s){
+	int at_node=0;
+	for(auto i:s){
+		if(tri[at_node][i-'a']==0){
+			tri[at_node][i-'a']=++dict_size;
+		}
+		words_in[at_node][i-'a']++;
+		//cout<<words_in[at_node][i-'a']++<<" ";
+		at_node=tri[at_node][i-'a'];
+	}
+	word_complete[at_node]++;
+}
+
+void find_prefix(string s,int n){
+	int at_node=0;
+	for(int i=0;i<n;i++){
+		if(tri[at_node][s[i]-'a']==0){
+			cout<<-1<<endl;
+			return;
+		}
+		at_node=tri[at_node][s[i]-'a']; 
+	}
+	int g=0;
+	bool flag=true;
+	while(flag){
+		int mx=0;
+		flag=false;
+		for(int i=0;i<26;i++){
+			if(tri[at_node][i]!=0){
+				flag=true;
+				if(mx<words_in[at_node][i]){
+					mx=words_in[at_node][i];
+					g=i;
+				}
+			}	
+		}
+		
+		if(flag){
+				at_node=tri[at_node][g];
+				char ch='a'+g;
+				s=s+ch;
+			}
+	}
+	cout<<s<<" "<<word_complete[at_node]<<endl;
+	
+}
+
+void solve(){
+	int n,m;
+	cin>>n;
+	string s;
+	while(n--){
+		cin>>s;
+		insrt(s);
+	}
+	cin>>m;
+	while(m--){
+		cin>>s;
+		find_prefix(s,s.size());
+	}
+}
+int main(){
+	memset(tri,0,sizeof(tri));
+	memset(words_in,0,sizeof(words_in));
+	memset(word_complete,0,sizeof(word_complete));
+	int t=1;
+	//cin>>t;
+	while(t--) solve();
+	return 0;
+}
