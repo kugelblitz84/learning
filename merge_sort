@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector <int> merge(vector <int> left , vector <int> right){
+	vector <int> merged_array;
+	for(int i=0,j=0;(i<left.size() or j<right.size());){
+			if((left[i]<right[j] or j==right.size()) and i<left.size()){
+				merged_array.push_back(left[i]);
+				i++;
+			}else {
+				merged_array.push_back(right[j]);
+				j++;
+			}	
+	}
+	return merged_array;
+}
+vector <int> merge_sort(vector<int> arr){
+	int n=arr.size();
+	if(n==1) return arr;
+	int mid=(n-1)/2;
+	vector <int> left(arr.begin(),arr.begin()+mid+1);
+	vector <int> right(arr.begin()+mid+1,arr.end());
+	vector <int> sorted_right=merge_sort(right);
+	vector <int> sorted_left=merge_sort(left);
+	vector <int> sorted_array = merge(sorted_left,sorted_right);
+	return sorted_array;
+
+}
+int main(){
+	vector <int> arr={2,6,23,56,3,5,6,334,434,564,24323,3};
+	arr=merge_sort(arr);
+	for(auto i:arr) cout<<i<<" ";
+	return 0;
+}
