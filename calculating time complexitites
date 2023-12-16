@@ -1,0 +1,90 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <chrono>
+#define ll long long
+
+using namespace std::chrono;
+using namespace std;
+ll N = 1e3;
+
+vector<ll> merge(vector<ll>sorted_left, vector<ll>sorted_right)
+{
+    vector<ll> arr;
+    for(auto l_i=0, r_i=0; l_i<sorted_left.size() or r_i<sorted_right.size();){
+        if(l_i<sorted_left.size() and (r_i==sorted_right.size() or sorted_left[l_i]<sorted_right[r_i])){
+            arr.push_back(sorted_left[l_i]);
+            l_i++;
+        }
+        else{
+            arr.push_back(sorted_right[r_i]);
+            r_i++;
+        }
+    }
+    return arr;
+}
+vector<ll> merge_sort(vector<ll>arr)
+{
+    if(arr.size()==1) return arr;
+
+    ll mid = (arr.size()-1)/2;
+
+    vector<ll> left(arr.begin(), arr.begin()+mid+1);
+    vector<ll> right(arr.begin()+mid+1, arr.end());
+    vector<ll> sorted_left = merge_sort(left);
+    vector<ll> sorted_right = merge_sort(right);
+    vector<ll> merge_arr = merge(sorted_left, sorted_right);
+
+    return merge_arr;
+}
+
+void sort(vector<ll>& arr)
+{
+    for (int i = 0; i < arr.size(); i++) {
+        for (int j = i + 1; j < arr.size(); j++) {
+            if (arr[i] > arr[j]) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+}
+
+void solve() {
+    vector<ll> arr(N);
+    std::iota(arr.begin(), arr.end(), 0);
+    for (auto i = N - 1; i >= 1; i--)
+        arr[i] = i;
+
+    // Execution time calculation of selection sort
+    auto start = high_resolution_clock::now();
+    sort(arr);
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<seconds>(stop - start);
+    cout << "Execution time of selection sort algo is : " << duration.count() << " s" << "\n";
+
+    // Execution time calculation of merge sort algorithm
+    auto start_m = high_resolution_clock::now();
+    merge_sort(arr);
+    auto stop_m = high_resolution_clock::now();
+    auto duration_m = duration_cast<microseconds>(stop_m - start_m);
+    cout << "Execution time of merge sort algo is : " << duration_m.count() << " ms" << "\n";
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    ll tc = 1;
+    //cin >> tc;
+    for (ll i = 1; i <= tc; i++) {
+        auto start = high_resolution_clock::now();
+        solve();
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(stop - start);
+        cout << duration.count() << " ms" << "\n";
+    }
+    return 0;
+}
