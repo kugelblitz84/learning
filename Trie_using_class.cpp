@@ -61,7 +61,7 @@ string trieNode :: search_prefix(string s){
             if(max_index == -1) return ans;
             else ans += ('a'+max_index), temp = temp->node[max_index];
         }
-        return ans+"yes";
+        return ans;
 }
 
 void solve(){
