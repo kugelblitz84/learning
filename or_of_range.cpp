@@ -22,6 +22,7 @@ void solve(){
     }
     cout<<ans<<"\n";
 }
+
 int32_t main() {
     //memset(dp,-1,sizeof(dp));
     int t=1;
